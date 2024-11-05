@@ -43,7 +43,7 @@ namespace MininalAPIPeliculas.Repositorios
 
         public async Task Actualizar(Pelicula pelicula)
         {
-            context.Add(pelicula);
+            context.Update(pelicula);
             await context.SaveChangesAsync();
         }
 
