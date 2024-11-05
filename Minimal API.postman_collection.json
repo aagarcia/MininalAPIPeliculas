@@ -273,23 +273,23 @@
 							"formdata": [
 								{
 									"key": "titulo",
-									"value": "Avengers: Endgame",
+									"value": "Zoolander 2",
 									"type": "text"
 								},
 								{
 									"key": "enCines",
-									"value": "True",
+									"value": "False",
 									"type": "text"
 								},
 								{
 									"key": "fechaLanzamiento",
-									"value": "2019-04-26",
+									"value": "2016-02-12",
 									"type": "text"
 								},
 								{
 									"key": "poster",
 									"type": "file",
-									"src": "/C:/Users/alex/Documents/net_cursos/curso2/peliculas/avengersendgame.jpg"
+									"src": "/C:/Users/alex/Documents/net_cursos/curso2/peliculas/zoolander2.jpg"
 								}
 							]
 						},
@@ -342,8 +342,72 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Actualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "titulo",
+									"value": "Bad Boys 1",
+									"type": "text"
+								},
+								{
+									"key": "enCines",
+									"value": "True",
+									"type": "text"
+								},
+								{
+									"key": "fechaLanzamiento",
+									"value": "1995-04-07",
+									"type": "text"
+								},
+								{
+									"key": "poster",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/4",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/7",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"7"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Comentarios",
+			"item": []
 		}
 	]
 }
