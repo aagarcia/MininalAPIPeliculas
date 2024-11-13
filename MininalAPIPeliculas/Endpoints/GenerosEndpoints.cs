@@ -15,7 +15,8 @@ namespace MininalAPIPeliculas.Endpoints
         {
             group.MapGet("/", ObtenerGeneros)
                 .CacheOutput(x => x.Expire(TimeSpan.FromSeconds(60))
-                .Tag("generos-get"));
+                .Tag("generos-get"))
+                .RequireAuthorization();
 
             group.MapGet("/{id:int}", ObtenerGeneroPorId).AddEndpointFilter<FiltroDePrueba>();
 
