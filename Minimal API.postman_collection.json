@@ -1,0 +1,578 @@
+{
+	"info": {
+		"_postman_id": "dee87ab7-8236-4642-b940-1df45a44bd95",
+		"name": "Minimal API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6067448"
+	},
+	"item": [
+		{
+			"name": "Generos",
+			"item": [
+				{
+					"name": "ObtenerTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{GENEROS}}",
+							"host": [
+								"{{SERVER}}{{GENEROS}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{GENEROS}}/1",
+							"host": [
+								"{{SERVER}}{{GENEROS}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Policial\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{GENEROS}}",
+							"host": [
+								"{{SERVER}}{{GENEROS}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Para Actualizar - Actualizado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{GENEROS}}/7",
+							"host": [
+								"{{SERVER}}{{GENEROS}}"
+							],
+							"path": [
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{GENEROS}}/1008",
+							"host": [
+								"{{SERVER}}{{GENEROS}}"
+							],
+							"path": [
+								"1008"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Actores",
+			"item": [
+				{
+					"name": "ObtenerTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}?pagina=1&recordsPorPagina=50",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							],
+							"query": [
+								{
+									"key": "pagina",
+									"value": "1"
+								},
+								{
+									"key": "recordsPorPagina",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "Will Ferrell",
+									"type": "text"
+								},
+								{
+									"key": "fechaNacimiento",
+									"value": "1967-07-16",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/alex/Documents/net_cursos/curso2/actores/WillFerrell.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}/3",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							],
+							"path": [
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerPorNombre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}/obtenerPorNombre/l",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							],
+							"path": [
+								"obtenerPorNombre",
+								"l"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "Samuel L. Jackson",
+									"type": "text"
+								},
+								{
+									"key": "fechaNacimiento",
+									"value": "1948-12-21",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/alex/Documents/net_cursos/curso2/actores/SamuelLJackson.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}/1",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{ACTORES}}/5",
+							"host": [
+								"{{SERVER}}{{ACTORES}}"
+							],
+							"path": [
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Peliculas",
+			"item": [
+				{
+					"name": "Crear",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "titulo",
+									"value": "Zoolander 2",
+									"type": "text"
+								},
+								{
+									"key": "enCines",
+									"value": "False",
+									"type": "text"
+								},
+								{
+									"key": "fechaLanzamiento",
+									"value": "2016-02-12",
+									"type": "text"
+								},
+								{
+									"key": "poster",
+									"type": "file",
+									"src": "/C:/Users/alex/Documents/net_cursos/curso2/peliculas/zoolander2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}?pagina=1&recordsPorPagina=10",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"query": [
+								{
+									"key": "pagina",
+									"value": "1"
+								},
+								{
+									"key": "recordsPorPagina",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/1",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "titulo",
+									"value": "Bad Boys 1",
+									"type": "text"
+								},
+								{
+									"key": "enCines",
+									"value": "True",
+									"type": "text"
+								},
+								{
+									"key": "fechaLanzamiento",
+									"value": "1995-04-07",
+									"type": "text"
+								},
+								{
+									"key": "poster",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/4",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/7",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AsignarGeneros",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    20\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/8/asignargeneros",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"8",
+								"asignargeneros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AsignarActores",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"actorId\": 7,\r\n    \"personaje\": \"Jacobim Mugatu\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULAS}}/8/asignaractores",
+							"host": [
+								"{{SERVER}}{{PELICULAS}}"
+							],
+							"path": [
+								"8",
+								"asignaractores"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comentarios",
+			"item": [
+				{
+					"name": "Crear",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cuerpo\": \"Scarlet excelente actriz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULA}}/2/{{COMENTARIOS}}",
+							"host": [
+								"{{SERVER}}{{PELICULA}}"
+							],
+							"path": [
+								"2",
+								"{{COMENTARIOS}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}",
+							"host": [
+								"{{SERVER}}{{PELICULA}}"
+							],
+							"path": [
+								"1",
+								"{{COMENTARIOS}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULA}}/{{COMENTARIOS}}/4",
+							"host": [
+								"{{SERVER}}{{PELICULA}}"
+							],
+							"path": [
+								"{{COMENTARIOS}}",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cuerpo\": \"Mas que interesante, tambien estuvo triste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/2",
+							"host": [
+								"{{SERVER}}{{PELICULA}}"
+							],
+							"path": [
+								"1",
+								"{{COMENTARIOS}}",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/2",
+							"host": [
+								"{{SERVER}}{{PELICULA}}"
+							],
+							"path": [
+								"1",
+								"{{COMENTARIOS}}",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
