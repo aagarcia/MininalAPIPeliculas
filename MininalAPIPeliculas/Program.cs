@@ -48,16 +48,41 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddAuthentication().AddJwtBearer(opciones => new TokenValidationParameters
+
+/*
+    https://passwords-generator.org/8-character
+    https://generate.plus/es/base64
+    {
+      "Authentication:Schemes:Bearer:SigningKeys": [
+        {
+          "Id": "cf3ac1fc",
+          "Issuer": "dotnet-user-jwts",
+          "Value": "/GdOHcsrlerwuDFloKLFv8r75oiW\u002BdMRq8oj\u002BgKYNew=",
+          "Length": 32
+        },
+        {
+          "Id": "5xfehp9w",
+          "Issuer": "nuestra-app",
+          "Value": "n0n32reUfhFb5lZpTUavMEodREcxQyKY7JnUsGYAjpE=",
+          "Length": 32
+        }
+      ]
+    }
+*/
+
+builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 {
-    ValidateIssuer = false, //si no queremos validar el emisor
-    ValidateAudience = false, //es para quien esta destinado el token
-    ValidateLifetime = true, //tiempo de vida del token
-    ValidateIssuerSigningKey = true, //para validar si el token esta debidamente firmado por una llave
-    //podemos utilizar multiples llaves o una llave especifica
-    //IssuerSigningKey = Llaves.ObtenerLlave(builder.Configuration).First(), //esto es para una llave
-    IssuerSigningKeys = Llaves.ObtenerTodasLasLlave(builder.Configuration), // para obtener todas las llaves
-    ClockSkew = TimeSpan.Zero, //para no tener problemas de diferencias de tiempo al evaluar la llave si vencio o no
+    opciones.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false, //si no queremos validar el emisor
+        ValidateAudience = false, //es para quien esta destinado el token
+        ValidateLifetime = true, //tiempo de vida del token
+        ValidateIssuerSigningKey = true, //para validar si el token esta debidamente firmado por una llave
+        //podemos utilizar multiples llaves o una llave especifica
+        //IssuerSigningKey = Llaves.ObtenerLlave(builder.Configuration).First(), //esto es para una llave
+        IssuerSigningKeys = Llaves.ObtenerTodasLasLlaves(builder.Configuration), // para obtener todas las llaves
+        ClockSkew = TimeSpan.Zero, //para no tener problemas de diferencias de tiempo al evaluar la llave si vencio o no
+    };
 });
 builder.Services.AddAuthorization();
 
