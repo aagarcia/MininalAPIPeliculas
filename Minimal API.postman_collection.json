@@ -11,7 +11,29 @@
 			"item": [
 				{
 					"name": "ObtenerTodos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -47,7 +69,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Policial\"\r\n}",
+							"raw": "{\r\n    \"nombre\": \"Acción\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -95,12 +117,12 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{SERVER}}{{GENEROS}}/1008",
+							"raw": "{{SERVER}}{{GENEROS}}/16",
 							"host": [
 								"{{SERVER}}{{GENEROS}}"
 							],
 							"path": [
-								"1008"
+								"16"
 							]
 						}
 					},
@@ -567,6 +589,95 @@
 								"1",
 								"{{COMENTARIOS}}",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Registrar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"alex@hotmail.com\",\r\n  \"password\": \"aA123456!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{USUARIOS}}/registrar",
+							"host": [
+								"{{SERVER}}{{USUARIOS}}"
+							],
+							"path": [
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verificar que el estado de la respuesta es 200\r",
+									"pm.test(\"La respuesta es 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Obtener el cuerpo de la respuesta como JSON\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Imprimir el cuerpo de la respuesta en la consola de Postman para ver su estructura (opcional)\r",
+									"//console.log(jsonData);\r",
+									"\r",
+									"// Verificar la existencia de una clave específica en el JSON y extraer su valor\r",
+									"pm.test(\"Verificar y extraer valor de 'token'\", function () {\r",
+									"    pm.expect(jsonData).to.have.property('token');\r",
+									"    var valorToken = jsonData.token;\r",
+									"    \r",
+									"    // Asignar el valor extraído a la variable de ambiente TOKEN\r",
+									"    pm.environment.set(\"TOKEN\", valorToken);\r",
+									"    //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN: \", valorToken);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"alex@hotmail.com\",\r\n  \"password\": \"aA123456!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{USUARIOS}}/login",
+							"host": [
+								"{{SERVER}}{{USUARIOS}}"
+							],
+							"path": [
+								"login"
 							]
 						}
 					},
