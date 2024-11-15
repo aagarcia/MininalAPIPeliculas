@@ -40,6 +40,7 @@ builder.Services.AddScoped<IRepositorioComentarios, RepositorioComentarios>();
 builder.Services.AddScoped<IRepositorioErrores, RepositorioErrores>();
 
 builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -72,6 +73,8 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 {
+    opciones.MapInboundClaims = false;
+
     opciones.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false, //si no queremos validar el emisor

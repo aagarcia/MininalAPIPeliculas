@@ -5,6 +5,7 @@ using MininalAPIPeliculas.DTOs;
 using MininalAPIPeliculas.Entidades;
 using MininalAPIPeliculas.Filtros;
 using MininalAPIPeliculas.Repositorios;
+using MininalAPIPeliculas.Servicios;
 
 namespace MininalAPIPeliculas.Endpoints
 {
@@ -57,12 +58,15 @@ namespace MininalAPIPeliculas.Endpoints
             return TypedResults.Ok(comentarioDTO);
         }
 
-        static async Task<Results<Created<ComentarioDTO>, NotFound>> Crear(int peliculaId,
-                                                                           CrearComentarioDTO crearComentarioDTO,
-                                                                           IRepositorioComentarios repositorioComentarios,
-                                                                           IRepositorioPeliculas repositorioPeliculas,
-                                                                           IMapper mapper,
-                                                                           IOutputCacheStore outputCacheStore)
+        static async Task<Results<Created<ComentarioDTO>, 
+                                  NotFound, 
+                                  BadRequest<string>>> Crear(int peliculaId,
+                                                             CrearComentarioDTO crearComentarioDTO,
+                                                             IRepositorioComentarios repositorioComentarios,
+                                                             IRepositorioPeliculas repositorioPeliculas,
+                                                             IMapper mapper,
+                                                             IOutputCacheStore outputCacheStore,
+                                                             IServicioUsuarios servicioUsuarios)
         {
             if (!await repositorioPeliculas.Existe(peliculaId))
             {
@@ -71,6 +75,16 @@ namespace MininalAPIPeliculas.Endpoints
 
             var comentario = mapper.Map<Comentario>(crearComentarioDTO);
             comentario.PeliculaId = peliculaId;
+
+            var usuario = await servicioUsuarios.ObtenerUsuario();
+
+            if (usuario is null)
+            {
+                return TypedResults.BadRequest("Usuario no encontrado");
+            }
+
+            comentario.UsuarioId = usuario.Id;
+
             var id = await repositorioComentarios.Crear(comentario);
             await outputCacheStore.EvictByTagAsync("comentarios-get", default);
             var comentarioDTO = mapper.Map<ComentarioDTO>(comentario);
