@@ -73,7 +73,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 {
-    opciones.MapInboundClaims = false;
+    opciones.MapInboundClaims = false; //para que no haga el mapeo de los clains
 
     opciones.TokenValidationParameters = new TokenValidationParameters
     {
@@ -87,7 +87,9 @@ builder.Services.AddAuthentication().AddJwtBearer(opciones =>
         ClockSkew = TimeSpan.Zero, //para no tener problemas de diferencias de tiempo al evaluar la llave si vencio o no
     };
 });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(opciones => {
+    opciones.AddPolicy("esadmin", politica => politica.RequireClaim("esadmin"));
+});
 
 // Fin de area de los servicios
 

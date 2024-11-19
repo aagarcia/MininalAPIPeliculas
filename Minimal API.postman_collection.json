@@ -29,7 +29,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{TOKEN}}",
+									"value": "{{TOKEN_USER1}}",
 									"type": "string"
 								}
 							]
@@ -65,11 +65,21 @@
 				{
 					"name": "Crear",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Acción\"\r\n}",
+							"raw": "{\r\n    \"nombre\": \"KDrama\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -487,6 +497,16 @@
 				{
 					"name": "Crear",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -499,12 +519,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{SERVER}}{{PELICULA}}/2/{{COMENTARIOS}}",
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}",
 							"host": [
 								"{{SERVER}}{{PELICULA}}"
 							],
 							"path": [
-								"2",
+								"1",
 								"{{COMENTARIOS}}"
 							]
 						}
@@ -550,6 +570,16 @@
 				{
 					"name": "Actualizar",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -562,14 +592,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/2",
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/1",
 							"host": [
 								"{{SERVER}}{{PELICULA}}"
 							],
 							"path": [
 								"1",
 								"{{COMENTARIOS}}",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -578,17 +608,27 @@
 				{
 					"name": "Eliminar",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER2}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/2",
+							"raw": "{{SERVER}}{{PELICULA}}/1/{{COMENTARIOS}}/1",
 							"host": [
 								"{{SERVER}}{{PELICULA}}"
 							],
 							"path": [
 								"1",
 								"{{COMENTARIOS}}",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -606,7 +646,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"alex@hotmail.com\",\r\n  \"password\": \"aA123456!\"\r\n}",
+							"raw": "{\r\n  \"email\": \"tita@hotmail.com\",\r\n  \"password\": \"aA123456!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -635,23 +675,46 @@
 									"// Verificar que el estado de la respuesta es 200\r",
 									"pm.test(\"La respuesta es 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    // Obtener el cuerpo de la respuesta como JSON\r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    // Imprimir el cuerpo de la respuesta en la consola de Postman para ver su estructura (opcional)\r",
+									"    //console.log(jsonData);\r",
+									"\r",
+									"    // Verificar la existencia de una clave específica en el JSON y extraer su valor\r",
+									"    pm.test(\"Verificar y extraer valor de 'token'\", function () {\r",
+									"        pm.expect(jsonData).to.have.property('token');\r",
+									"        var valorToken = jsonData.token;\r",
+									"\r",
+									"        // Obtener el cuerpo de la solicitud \r",
+									"        var requestData = pm.request.body.raw; \r",
+									"        var requestDataJson = JSON.parse(requestData);\r",
+									"\r",
+									"        // Verificar el valor del campo 'email' \r",
+									"        if (requestDataJson.email === 'alex@hotmail.com') { \r",
+									"            pm.environment.set(\"TOKEN_USER1\", valorToken); \r",
+									"            //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN_USER1: \", valorToken); \r",
+									"        } else if (requestDataJson.email === 'tita@hotmail.com') { \r",
+									"            pm.environment.set(\"TOKEN_USER2\", valorToken); \r",
+									"            //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN_USER2: \", valorToken); \r",
+									"        } else { \r",
+									"            console.log(\"El valor del campo 'email' no coincide con los valores esperados.\");\r",
+									"        }\r",
+									"    });\r",
 									"});\r",
 									"\r",
-									"// Obtener el cuerpo de la respuesta como JSON\r",
-									"var jsonData = pm.response.json();\r",
 									"\r",
-									"// Imprimir el cuerpo de la respuesta en la consola de Postman para ver su estructura (opcional)\r",
-									"//console.log(jsonData);\r",
-									"\r",
-									"// Verificar la existencia de una clave específica en el JSON y extraer su valor\r",
-									"pm.test(\"Verificar y extraer valor de 'token'\", function () {\r",
-									"    pm.expect(jsonData).to.have.property('token');\r",
-									"    var valorToken = jsonData.token;\r",
-									"    \r",
-									"    // Asignar el valor extraído a la variable de ambiente TOKEN\r",
-									"    pm.environment.set(\"TOKEN\", valorToken);\r",
-									"    //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN: \", valorToken);\r",
-									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
 									""
 								],
 								"type": "text/javascript",
@@ -678,6 +741,150 @@
 							],
 							"path": [
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HacerAdmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"alex@hotmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{USUARIOS}}/haceradmin",
+							"host": [
+								"{{SERVER}}{{USUARIOS}}"
+							],
+							"path": [
+								"haceradmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoverAdmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"alex@hotmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{USUARIOS}}/removeradmin",
+							"host": [
+								"{{SERVER}}{{USUARIOS}}"
+							],
+							"path": [
+								"removeradmin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RenovarToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verificar que el estado de la respuesta es 200\r",
+									"pm.test(\"La respuesta es 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    // Obtener el cuerpo de la respuesta como JSON\r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    // Imprimir el cuerpo de la respuesta en la consola de Postman para ver su estructura (opcional)\r",
+									"    //console.log(jsonData);\r",
+									"\r",
+									"    // Verificar la existencia de una clave específica en el JSON y extraer el valor del token \r",
+									"    pm.expect(jsonData).to.have.property('token'); \r",
+									"    var token = jsonData.token; \r",
+									"    \r",
+									"    // Decodificar el JWT y obtener el payload \r",
+									"    const atob = require('atob'); \r",
+									"    var base64Url = token.split('.')[1]; \r",
+									"    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); \r",
+									"    var payload = JSON.parse(atob(base64)); \r",
+									"    \r",
+									"    // Obtener el valor de 'email' del payload \r",
+									"    var email = payload.email;\r",
+									"\r",
+									"    // Verificar el valor del campo 'email' \r",
+									"    if (email === 'alex@hotmail.com') { \r",
+									"        pm.environment.set(\"TOKEN_USER1\", token); \r",
+									"        //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN_USER1: \", token); \r",
+									"    } else if (email === 'tita@hotmail.com') { \r",
+									"        pm.environment.set(\"TOKEN_USER2\", token); \r",
+									"        //console.log(\"Valor de 'token' asignado a la variable de ambiente TOKEN_USER2: \", token); \r",
+									"    } else { \r",
+									"        console.log(\"El valor del campo 'email' no coincide con los valores esperados.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN_USER1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}{{USUARIOS}}/renovartoken",
+							"host": [
+								"{{SERVER}}{{USUARIOS}}"
+							],
+							"path": [
+								"renovartoken"
 							]
 						}
 					},

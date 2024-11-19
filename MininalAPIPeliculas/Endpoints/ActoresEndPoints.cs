@@ -24,11 +24,18 @@ namespace MininalAPIPeliculas.Endpoints
 
             group.MapGet("/obtenerPorNombre/{nombre}", ObtenerPorNombre);
 
-            group.MapPost("/", CrearActor).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>();
+            group.MapPost("/", CrearActor)
+                 .DisableAntiforgery()
+                 .AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapPut("/{id:int}", ActualizarActor).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>();
+            group.MapPut("/{id:int}", ActualizarActor)
+                 .DisableAntiforgery()
+                 .AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapDelete("/{id:int}", BorrarActor);
+            group.MapDelete("/{id:int}", BorrarActor)
+                 .RequireAuthorization("esadmin");
 
             return group;
         }

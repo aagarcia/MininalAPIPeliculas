@@ -18,13 +18,19 @@ namespace MininalAPIPeliculas.Endpoints
                 .Tag("generos-get"))
                 .RequireAuthorization();
 
-            group.MapGet("/{id:int}", ObtenerGeneroPorId).AddEndpointFilter<FiltroDePrueba>();
+            group.MapGet("/{id:int}", ObtenerGeneroPorId)
+                 .AddEndpointFilter<FiltroDePrueba>();
 
-            group.MapPost("/", CrearGenero).AddEndpointFilter<FiltroValidaciones<CrearGeneroDTO>>();
+            group.MapPost("/", CrearGenero)
+                 .AddEndpointFilter<FiltroValidaciones<CrearGeneroDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapPut("/{id:int}", ActualizarGenero).AddEndpointFilter<FiltroValidaciones<CrearGeneroDTO>>();
+            group.MapPut("/{id:int}", ActualizarGenero)
+                 .AddEndpointFilter<FiltroValidaciones<CrearGeneroDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapDelete("/{id:int}", BorrarGenero);
+            group.MapDelete("/{id:int}", BorrarGenero)
+                 .RequireAuthorization("esadmin");
 
             return group;
         }

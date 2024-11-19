@@ -23,15 +23,24 @@ namespace MininalAPIPeliculas.Endpoints
 
             group.MapGet("/{id:int}", ObtenerPorId);
 
-            group.MapPost("/", CrearPelicula).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>();
+            group.MapPost("/", CrearPelicula)
+                 .DisableAntiforgery()
+                 .AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapPut("/{id:int}", ActualizarPelicula).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>();
+            group.MapPut("/{id:int}", ActualizarPelicula)
+                 .DisableAntiforgery()
+                 .AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>()
+                 .RequireAuthorization("esadmin");
 
-            group.MapDelete("/{id:int}", BorrarPelicula);
+            group.MapDelete("/{id:int}", BorrarPelicula)
+                 .RequireAuthorization("esadmin");
 
-            group.MapPost("/{id:int}/asignargeneros", AsignarGeneros);
+            group.MapPost("/{id:int}/asignargeneros", AsignarGeneros)
+                 .RequireAuthorization("esadmin");
 
-            group.MapPost("/{id:int}/asignaractores", AsignarActores);
+            group.MapPost("/{id:int}/asignaractores", AsignarActores)
+                 .RequireAuthorization("esadmin");
 
             return group;
         }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MininalAPIPeliculas.DTOs;
 using MininalAPIPeliculas.Filtros;
+using MininalAPIPeliculas.Servicios;
 using MininalAPIPeliculas.Utilidades;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,13 +17,23 @@ namespace MininalAPIPeliculas.Endpoints
 		{
 			group.MapPost("/registrar", Registrar)
 				 .AddEndpointFilter<FiltroValidaciones<CredencialesUsuarioDTO>>();
-			group.MapPost("login", Login).AddEndpointFilter<FiltroValidaciones<CredencialesUsuarioDTO>>();
-			return group;
+			group.MapPost("/login", Login)
+				 .AddEndpointFilter<FiltroValidaciones<CredencialesUsuarioDTO>>();
+			group.MapPost("/haceradmin", HacerAdmin)
+				 .AddEndpointFilter<FiltroValidaciones<EditarClaimDTO>>()
+			     .RequireAuthorization("esadmin");
+			group.MapPost("/removeradmin", RemoverAdmin)
+				 .AddEndpointFilter<FiltroValidaciones<EditarClaimDTO>>()
+                 .RequireAuthorization("esadmin");
+			group.MapGet("/renovartoken", RenovarToken)
+				 .RequireAuthorization();
+            return group;
 		}
 
-		static async Task<Results<Ok<string>, BadRequest<IEnumerable<IdentityError>>>> Registrar(CredencialesUsuarioDTO credencialesUsuarioDTO,
-																						[FromServices] UserManager<IdentityUser> userManager,
-																						IConfiguration configuration)
+		static async Task<Results<Ok<string>, 
+			                      BadRequest<IEnumerable<IdentityError>>>> Registrar(CredencialesUsuarioDTO credencialesUsuarioDTO,
+																					 [FromServices] UserManager<IdentityUser> userManager,
+																					 IConfiguration configuration)
 		{
 			var usuario = new IdentityUser
 			{
@@ -44,10 +55,11 @@ namespace MininalAPIPeliculas.Endpoints
 			}
 		}
 
-		static async Task<Results<Ok<RespuestaAutenticacionDTO>, BadRequest<string>>> Login(CredencialesUsuarioDTO credencialesUsuarioDTO,
-																	                        [FromServices] SignInManager<IdentityUser> signInManager,
-																						    [FromServices] UserManager<IdentityUser> userManager,
-																						    IConfiguration configuration)
+		static async Task<Results<Ok<RespuestaAutenticacionDTO>, 
+			                      BadRequest<string>>> Login(CredencialesUsuarioDTO credencialesUsuarioDTO,
+														     [FromServices] SignInManager<IdentityUser> signInManager,
+															 [FromServices] UserManager<IdentityUser> userManager,
+															 IConfiguration configuration)
 		{
 			var usuario = await userManager.FindByEmailAsync(credencialesUsuarioDTO.Email);
 
@@ -62,7 +74,9 @@ namespace MininalAPIPeliculas.Endpoints
 
 			if (resultado.Succeeded)
 			{
-				var respuestaAutenticacion = ConstruirToken(credencialesUsuarioDTO, configuration);
+				var respuestaAutenticacion = await ConstruirToken(credencialesUsuarioDTO, 
+					                                              configuration,
+																  userManager);
 				return TypedResults.Ok(respuestaAutenticacion);
 			}
 			else
@@ -71,14 +85,70 @@ namespace MininalAPIPeliculas.Endpoints
             }
 		}
 
-		private static RespuestaAutenticacionDTO ConstruirToken(CredencialesUsuarioDTO credencialesUsuarioDTO,
-																IConfiguration configuration)
+		static async Task<Results<NoContent, NotFound>> HacerAdmin(EditarClaimDTO editarClaimDTO,
+																   [FromServices] UserManager<IdentityUser> userManager)
+		{
+			var usuario = await userManager.FindByEmailAsync(editarClaimDTO.Email);
+
+			if (usuario is null)
+			{
+				return TypedResults.NotFound();
+			}
+
+			await userManager.AddClaimAsync(usuario, new Claim("esadmin", "true"));
+
+			return TypedResults.NoContent();
+		}
+
+        static async Task<Results<NoContent, NotFound>> RemoverAdmin(EditarClaimDTO editarClaimDTO,
+                                                                     [FromServices] UserManager<IdentityUser> userManager)
+        {
+            var usuario = await userManager.FindByEmailAsync(editarClaimDTO.Email);
+
+            if (usuario is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            await userManager.RemoveClaimAsync(usuario, new Claim("esadmin", "true"));
+
+            return TypedResults.NoContent();
+        }
+
+		public async static Task<Results<Ok<RespuestaAutenticacionDTO>, NotFound>> RenovarToken(IServicioUsuarios servicioUsuarios,
+			                                                                                    IConfiguration configuration,
+																								[FromServices] UserManager<IdentityUser> userManager)
+		{
+			var usuario = await servicioUsuarios.ObtenerUsuario();
+
+			if (usuario is null)
+			{
+				return TypedResults.NotFound();
+			}
+
+			var credencialesUsuarioDTO = new CredencialesUsuarioDTO { Email = usuario.Email! };
+
+			var respuestaAutenticacionDTO = await ConstruirToken(credencialesUsuarioDTO, 
+				                                                 configuration, 
+																 userManager);
+
+			return TypedResults.Ok(respuestaAutenticacionDTO);
+		}
+
+        private async static Task<RespuestaAutenticacionDTO> ConstruirToken(CredencialesUsuarioDTO credencialesUsuarioDTO,
+																            IConfiguration configuration,
+																	        UserManager<IdentityUser> userManager)
 		{
 			var claims = new List<Claim>
 			{ 
 				new Claim("email", credencialesUsuarioDTO.Email),
 				new Claim("lo que yo quiera", "cualquier otro valor")
 			};
+
+			var usuario = await userManager.FindByNameAsync(credencialesUsuarioDTO.Email);
+			var claimsDB = await userManager.GetClaimsAsync(usuario!);
+
+			claims.AddRange(claimsDB);
 
 			var llave = Llaves.ObtenerLlave(configuration);
 			var creds = new SigningCredentials(llave.First(), SecurityAlgorithms.HmacSha256);
