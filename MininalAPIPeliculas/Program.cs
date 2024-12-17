@@ -1,8 +1,10 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MininalAPIPeliculas;
 using MininalAPIPeliculas.Endpoints;
 using MininalAPIPeliculas.Entidades;
@@ -31,7 +33,12 @@ builder.Services.AddCors(opciones =>
 builder.Services.AddOutputCache();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Peliculas API",
+    });
+});
 
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
@@ -142,6 +149,16 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/error", () => {
     throw new InvalidOperationException("Error de ejemplo");
+});
+
+
+app.MapPost("/modelbinding", ([FromQuery] string? nombre) => {
+    if (nombre is null)
+    {
+        nombre = "Vacio";
+    }
+
+    return TypedResults.Ok($"El nombre es: {nombre}");
 });
 
 app.MapGroup("/generos").MapGeneros();
